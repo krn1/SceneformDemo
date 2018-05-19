@@ -10,15 +10,14 @@
 
     <fragment
         android:id="@+id/sceneform_fragment"
-        android:name="com.google.ar.sceneform.ux.ArFragment"
+        android:name="raghu.co.ar.PermissionArFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toTopOf="@id/gallery_layout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread"
-        app:layout_constraintVertical_weight="9"
-        tools:layout="@layout/fragment_main" />
+        app:layout_constraintVertical_weight="9" />
 
     <LinearLayout
         android:id="@+id/gallery_layout"
