@@ -45,6 +45,8 @@ import java.util.concurrent.CompletableFuture;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import raghu.co.ar.gallery.GalleryLayout;
+import raghu.co.ar.utils.ViewUtils;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab;
 
     @BindView(R.id.gallery_layout)
-    LinearLayout gallery;
+    GalleryLayout gallery;
 
     private ArFragment fragment;
     private PointerDrawable pointer = new PointerDrawable();
@@ -80,77 +82,9 @@ public class MainActivity extends AppCompatActivity {
             onUpdate();
         });
 
-        initializeGallery();
+        gallery.addTo(fragment);
     }
 
-    private void initializeGallery() {
-        ImageView andy = new ImageView(this);
-        andy.setImageResource(R.drawable.droid_thumb);
-        andy.setContentDescription("andy");
-        andy.setOnClickListener(view ->{addObject(Uri.parse("andy.sfb"));});
-        gallery.addView(andy);
-
-        ImageView cabin = new ImageView(this);
-        cabin.setImageResource(R.drawable.cabin_thumb);
-        cabin.setContentDescription("cabin");
-        cabin.setOnClickListener(view ->{addObject(Uri.parse("Cabin.sfb"));});
-        gallery.addView(cabin);
-
-        ImageView house = new ImageView(this);
-        house.setImageResource(R.drawable.house_thumb);
-        house.setContentDescription("house");
-        house.setOnClickListener(view ->{addObject(Uri.parse("House.sfb"));});
-        gallery.addView(house);
-
-        ImageView igloo = new ImageView(this);
-        igloo.setImageResource(R.drawable.igloo_thumb);
-        igloo.setContentDescription("igloo");
-        igloo.setOnClickListener(view ->{addObject(Uri.parse("igloo.sfb"));});
-        gallery.addView(igloo);
-    }
-
-    private void addObject(Uri model) {
-        Frame frame = fragment.getArSceneView().getArFrame();
-        Point pt = getScreenCenter();
-        List<HitResult> hits;
-        if (frame != null) {
-            hits = frame.hitTest(pt.x, pt.y);
-            for (HitResult hit : hits) {
-                Trackable trackable = hit.getTrackable();
-                if ((trackable instanceof Plane &&
-                        ((Plane) trackable).isPoseInPolygon(hit.getHitPose()))) {
-                    placeObject(fragment, hit.createAnchor(), model);
-                    break;
-
-                }
-            }
-        }
-    }
-
-    private void placeObject(ArFragment fragment, Anchor anchor, Uri model) {
-        CompletableFuture<Void> renderableFuture =
-                ModelRenderable.builder()
-                        .setSource(fragment.getContext(), model)
-                        .build()
-                        .thenAccept(renderable -> addNodeToScene(fragment, anchor, renderable))
-                        .exceptionally((throwable -> {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                            builder.setMessage(throwable.getMessage())
-                                    .setTitle("Oops error!");
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                            return null;
-                        }));
-    }
-
-    private void addNodeToScene(ArFragment fragment, Anchor anchor, Renderable renderable) {
-        AnchorNode anchorNode = new AnchorNode(anchor);
-        TransformableNode node = new TransformableNode(fragment.getTransformationSystem());
-        node.setRenderable(renderable);
-        node.setParent(anchorNode);
-        fragment.getArSceneView().getScene().addChild(anchorNode);
-        node.select();
-    }
 
     private void onUpdate() {
         Timber.e("frameTime listener onUpdate");
@@ -183,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean updateHitTest() {
         Frame frame = fragment.getArSceneView().getArFrame();
-        android.graphics.Point pt = getScreenCenter();
+        android.graphics.Point pt = ViewUtils.getScreenCenter(this);
         List<HitResult> hits;
         boolean wasHitting = isHitting;
         isHitting = false;
@@ -201,17 +135,13 @@ public class MainActivity extends AppCompatActivity {
         return wasHitting != isHitting;
     }
 
-    private android.graphics.Point getScreenCenter() {
-        View vw = findViewById(android.R.id.content);
-        return new android.graphics.Point(vw.getWidth()/2, vw.getHeight()/2);
-    }
-
     private String generateFilename() {
         String date =
                 new SimpleDateFormat("yyyyMMddHHmmss", java.util.Locale.getDefault()).format(new Date());
         return Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES) + File.separator + "Sceneform/" + date + "_screenshot.jpg";
     }
+
     private void saveBitmapToDisk(Bitmap bitmap, String filename) throws IOException {
 
         File out = new File(filename);
