@@ -23,6 +23,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".camera.ImageActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/BaseAppTheme" />
+
         <meta-data android:name="com.google.ar.core" android:value="required" />
 
         <provider

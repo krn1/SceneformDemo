@@ -2,50 +2,34 @@ package raghu.co.ar;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.PixelCopy;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
-import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.ArSceneView;
-import com.google.ar.sceneform.rendering.ModelRenderable;
-import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.ux.ArFragment;
-import com.google.ar.sceneform.ux.TransformableNode;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.concurrent.CompletableFuture;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.CompositeDisposable;
 import raghu.co.ar.gallery.GalleryLayout;
+import raghu.co.ar.utils.FileUtils;
 import raghu.co.ar.utils.ViewUtils;
 import timber.log.Timber;
 
@@ -65,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean isTracking;
     private boolean isHitting;
 
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Timber.plant(new Timber.DebugTree());
 
-        fab.setOnClickListener(view -> takePhoto());
+        fab.setOnClickListener(view -> takeCameraPhoto());
 
         fragment = (ArFragment)
                 getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
@@ -85,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
         gallery.addTo(fragment);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
+    }
 
     private void onUpdate() {
         Timber.e("frameTime listener onUpdate");
@@ -135,70 +126,66 @@ public class MainActivity extends AppCompatActivity {
         return wasHitting != isHitting;
     }
 
-    private String generateFilename() {
-        String date =
-                new SimpleDateFormat("yyyyMMddHHmmss", java.util.Locale.getDefault()).format(new Date());
-        return Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES) + File.separator + "Sceneform/" + date + "_screenshot.jpg";
+    private void showSaved(Uri photoUri) {
+        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                "Photo saved", Snackbar.LENGTH_LONG);
+        snackbar.setAction("Open in Photos", v -> {
+
+            Intent intent = new Intent(Intent.ACTION_VIEW, photoUri);
+            intent.setDataAndType(photoUri, "image/*");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(intent);
+
+        });
+        snackbar.show();
     }
 
-    private void saveBitmapToDisk(Bitmap bitmap, String filename) throws IOException {
+//        private void startImageProcessing() {
+//            ArSceneView view = fragment.getArSceneView();
+//
+//            // Create a bitmap the size of the scene view.
+//            final Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),
+//                    Bitmap.Config.ARGB_8888);
+//
+//            Disposable disposable = Flowable.fromCallable(() -> processBitMap(view,bitmap))
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(photoUri -> showSaved(photoUri) );
+//
+//            compositeDisposable.add(disposable); //IDE is satisfied that the Disposable is being managed.
+//
+//        }
+//        
 
-        File out = new File(filename);
-        if (!out.getParentFile().exists()) {
-            out.getParentFile().mkdirs();
-        }
-        try (FileOutputStream outputStream = new FileOutputStream(filename);
-             ByteArrayOutputStream outputData = new ByteArrayOutputStream()) {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputData);
-            outputData.writeTo(outputStream);
-            outputStream.flush();
-            outputStream.close();
-        } catch (IOException ex) {
-            throw new IOException("Failed to save bitmap to disk", ex);
-        }
-    }
-
-    private void takePhoto() {
-        final String filename = generateFilename();
+    private void takeCameraPhoto() {
         ArSceneView view = fragment.getArSceneView();
 
         // Create a bitmap the size of the scene view.
         final Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),
                 Bitmap.Config.ARGB_8888);
 
-        // Create a handler thread to offload the processing of the image.
-        final HandlerThread handlerThread = new HandlerThread("PixelCopier");
+
+        processBitMap(view, bitmap);
+    }
+
+    private void processBitMap(ArSceneView view, Bitmap bitmap) {
+        final HandlerThread handlerThread = new HandlerThread("BMCopy");
         handlerThread.start();
-        // Make the request to copy.
         PixelCopy.request(view, bitmap, (copyResult) -> {
+            Uri photoUri = null;
             if (copyResult == PixelCopy.SUCCESS) {
                 try {
-                    saveBitmapToDisk(bitmap, filename);
+                    photoUri = FileUtils.saveBitmapToDisk(bitmap, this);
                 } catch (IOException e) {
                     Toast toast = Toast.makeText(MainActivity.this, e.toString(),
                             Toast.LENGTH_LONG);
                     toast.show();
                     return;
                 }
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                        "Photo saved", Snackbar.LENGTH_LONG);
-                snackbar.setAction("Open in Photos", v -> {
-                    File photoFile = new File(filename);
-
-                    Uri photoURI = FileProvider.getUriForFile(MainActivity.this,
-                            MainActivity.this.getPackageName() + ".raghu.co.ar.name.provider",
-                            photoFile);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, photoURI);
-                    intent.setDataAndType(photoURI, "image/*");
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(intent);
-
-                });
-                snackbar.show();
+                showSaved(photoUri);
             } else {
                 Toast toast = Toast.makeText(MainActivity.this,
-                        "Failed to copyPixels: " + copyResult, Toast.LENGTH_LONG);
+                        "Failed to convert into bitmap: " + copyResult, Toast.LENGTH_LONG);
                 toast.show();
             }
             handlerThread.quitSafely();
