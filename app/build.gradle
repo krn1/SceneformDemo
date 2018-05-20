@@ -65,3 +65,38 @@ sceneform.asset('sampledata/models/igloo.obj',
         'default',
         'sampledata/models/igloo.sfa',
         'src/main/assets/igloo')
+
+sceneform.asset('sampledata/models/1/emoji_smile_anim_a.fbx',
+        'default',
+        'sampledata/models/1/emoji_smile_anim_a.sfa',
+        'src/main/assets/emoji_smile_anim_a')
+
+sceneform.asset('sampledata/models/2/emoji_wow_anim.fbx',
+        'default',
+        'sampledata/models/2/emoji_wow_anim.sfa',
+        'src/main/assets/emoji_wow_anim')
+
+sceneform.asset('sampledata/models/3/object_star_anim.fbx',
+        'default',
+        'sampledata/models/3/object_star_anim.sfa',
+        'src/main/assets/object_star_anim')
+
+sceneform.asset('sampledata/models/4/emoji_heart_anim.fbx',
+        'default',
+        'sampledata/models/4/emoji_heart_anim.sfa',
+        'src/main/assets/emoji_heart_anim')
+
+sceneform.asset('sampledata/models/5/object_cloud_anim.fbx',
+        'default',
+        'sampledata/models/5/object_cloud_anim.sfa',
+        'src/main/assets/object_cloud_anim')
+
+sceneform.asset('sampledata/models/6/pumpkinman_anim.fbx',
+        'default',
+        'sampledata/models/6/pumpkinman_anim.sfa',
+        'src/main/assets/pumpkinman_anim')
+
+sceneform.asset('sampledata/models/7/icecreamman_anim_a.fbx',
+        'default',
+        'sampledata/models/7/icecreamman_anim_a.sfa',
+        'src/main/assets/icecreamman_anim_a')

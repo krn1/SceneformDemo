@@ -1,0 +1,154 @@
+{
+   materials: [
+      {
+         name: "blinn1",
+         parameters: [
+            {
+               baseColor: [
+                  1,
+                  1,
+                  1,
+                  1,
+               ],
+            },
+            {
+               baseColorMap: "pumpkinman_body_diffuse",
+            },
+            {
+               normalMap: null,
+            },
+            {
+               interpolatedColor: null,
+            },
+            {
+               metallic: 0,
+            },
+            {
+               metallicMap: null,
+            },
+            {
+               roughness: 1,
+            },
+            {
+               roughnessMap: null,
+            },
+            {
+               reflectance: 0.5,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/fbx_material.sfm",
+      },
+      {
+         name: "object_pumpkinman_anim_v2:blinn1",
+         parameters: [
+            {
+               baseColor: [
+                  1,
+                  1,
+                  1,
+                  1,
+               ],
+            },
+            {
+               baseColorMap: "pumpkinman_head_diffuse",
+            },
+            {
+               normalMap: null,
+            },
+            {
+               interpolatedColor: null,
+            },
+            {
+               metallic: 0,
+            },
+            {
+               metallicMap: null,
+            },
+            {
+               roughness: 1,
+            },
+            {
+               roughnessMap: null,
+            },
+            {
+               reflectance: 0.5,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/fbx_material.sfm",
+      },
+   ],
+   model: {
+      attributes: [
+         "Position",
+         "TexCoord",
+         "Orientation",
+      ],
+      file: "sampledata/models/6/pumpkinman_anim.fbx",
+      name: "pumpkinman_anim",
+      scale: 0.98963900000000005,
+      suggested_collision: {
+         center: {
+            x: 0,
+            y: 0,
+            z: 0,
+         },
+         size: {
+            x: 1,
+            y: 1,
+            z: 1,
+         },
+         type: "Box",
+      },
+   },
+   samplers: [
+      {
+         file: "sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_head_diffuse.png",
+         name: "pumpkinman_head_diffuse",
+         pipeline_name: "/Users/kraghu/Downloads/sceneform-intro-master/ARView/app/sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_head_diffuse.png",
+      },
+      {
+         file: "sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_head_specular.png",
+         name: "pumpkinman_head_specular",
+         params: {
+            usage_type: "Data",
+         },
+         pipeline_name: "/Users/kraghu/Downloads/sceneform-intro-master/ARView/app/sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_head_specular.png",
+      },
+      {
+         file: "sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_head_normal.png",
+         name: "pumpkinman_head_normal",
+         params: {
+            usage_type: "Data",
+         },
+         pipeline_name: "/Users/kraghu/Downloads/sceneform-intro-master/ARView/app/sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_head_normal.png",
+      },
+      {
+         file: "sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_body_diffuse.png",
+         name: "pumpkinman_body_diffuse",
+         pipeline_name: "/Users/kraghu/Downloads/sceneform-intro-master/ARView/app/sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_body_diffuse.png",
+      },
+      {
+         file: "sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_body_normal.png",
+         name: "pumpkinman_body_normal",
+         params: {
+            usage_type: "Data",
+         },
+         pipeline_name: "/Users/kraghu/Downloads/sceneform-intro-master/ARView/app/sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_body_normal.png",
+      },
+      {
+         file: "sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_body_specular.png",
+         name: "pumpkinman_body_specular",
+         params: {
+            usage_type: "Data",
+         },
+         pipeline_name: "/Users/kraghu/Downloads/sceneform-intro-master/ARView/app/sampledata/models/6/pumpkinman_anim.fbm/pumpkinman_body_specular.png",
+      },
+   ],
+   version: "0.51:1",
+}

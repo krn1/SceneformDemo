@@ -1,0 +1,91 @@
+{
+   materials: [
+      {
+         name: "blinn1",
+         parameters: [
+            {
+               baseColor: [
+                  1,
+                  1,
+                  1,
+                  1,
+               ],
+            },
+            {
+               baseColorMap: "emoji_wow_diffuse",
+            },
+            {
+               normalMap: null,
+            },
+            {
+               interpolatedColor: null,
+            },
+            {
+               metallic: 0,
+            },
+            {
+               metallicMap: null,
+            },
+            {
+               roughness: 1,
+            },
+            {
+               roughnessMap: null,
+            },
+            {
+               reflectance: 0.5,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/fbx_material.sfm",
+      },
+   ],
+   model: {
+      attributes: [
+         "Position",
+         "TexCoord",
+         "Orientation",
+      ],
+      file: "sampledata/models/2/emoji_wow_anim.fbx",
+      name: "emoji_wow_anim",
+      suggested_collision: {
+         center: {
+            x: 0,
+            y: 0,
+            z: 0,
+         },
+         size: {
+            x: 1,
+            y: 1,
+            z: 1,
+         },
+         type: "Box",
+      },
+   },
+   samplers: [
+      {
+         file: "sampledata/models/2/emoji_wow_anim.fbm/emoji_wow_normal.png",
+         name: "emoji_wow_normal",
+         params: {
+            usage_type: "Data",
+         },
+         pipeline_name: "/Users/kraghu/Downloads/sceneform-intro-master/ARView/app/sampledata/models/2/emoji_wow_anim.fbm/emoji_wow_normal.png",
+      },
+      {
+         file: "sampledata/models/2/emoji_wow_anim.fbm/emoji_wow_diffuse.png",
+         name: "emoji_wow_diffuse",
+         pipeline_name: "/Users/kraghu/Downloads/sceneform-intro-master/ARView/app/sampledata/models/2/emoji_wow_anim.fbm/emoji_wow_diffuse.png",
+      },
+      {
+         file: "sampledata/models/2/emoji_wow_anim.fbm/emoji_wow_specular.png",
+         name: "emoji_wow_specular",
+         params: {
+            usage_type: "Data",
+         },
+         pipeline_name: "/Users/kraghu/Downloads/sceneform-intro-master/ARView/app/sampledata/models/2/emoji_wow_anim.fbm/emoji_wow_specular.png",
+      },
+   ],
+   version: "0.51:1",
+}

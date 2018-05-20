@@ -5,8 +5,9 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
-import android.view.View;
+import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -30,8 +31,11 @@ import raghu.co.ar.utils.ViewUtils;
 
 public class GalleryLayout extends LinearLayout {
 
+    private static int IMAGE_SIZE = 200;
+    private static int IMAGE_MARGIN_SIZE = 5;
+
     private ArFragment fragment = null;
-    private MainActivity activity = null;
+    private AppCompatActivity activity = null;
 
     public GalleryLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -40,42 +44,26 @@ public class GalleryLayout extends LinearLayout {
 
     public void addTo(ArFragment fragment) {
         this.fragment = fragment;
-        this.activity = (MainActivity) getContext();
+        this.activity = (AppCompatActivity) getContext();
     }
 
     // region private
     private void init() {
-        ImageView andy = new ImageView(getContext());
-        andy.setImageResource(R.drawable.droid_thumb);
-        andy.setContentDescription("andy");
-        andy.setOnClickListener(view -> {
-            addObject(Uri.parse("andy.sfb"));
-        });
-        addView(andy);
+        //        ImageView andy = new ImageView(getContext());
+        //        andy.setImageResource(R.drawable.droid_thumb);
+        //        andy.setContentDescription("andy");
+        //        andy.setOnClickListener(view -> {
+        //            addObject(Uri.parse("andy.sfb"));
+        //        });
+        //        addView(andy);
 
-        ImageView cabin = new ImageView(getContext());
-        cabin.setImageResource(R.drawable.cabin_thumb);
-        cabin.setContentDescription("cabin");
-        cabin.setOnClickListener(view -> {
-            addObject(Uri.parse("Cabin.sfb"));
-        });
-        addView(cabin);
-
-        ImageView house = new ImageView(getContext());
-        house.setImageResource(R.drawable.house_thumb);
-        house.setContentDescription("house");
-        house.setOnClickListener(view -> {
-            addObject(Uri.parse("House.sfb"));
-        });
-        addView(house);
-
-        ImageView igloo = new ImageView(getContext());
-        igloo.setImageResource(R.drawable.igloo_thumb);
-        igloo.setContentDescription("igloo");
-        igloo.setOnClickListener(view -> {
-            addObject(Uri.parse("igloo.sfb"));
-        });
-        addView(igloo);
+        addImage(R.drawable.emoji_smile, "emoji_smile_anim_a.sfb");
+        addImage(R.drawable.wow, "emoji_wow_anim.sfb");
+        addImage(R.drawable.star, "object_star_anim.sfb");
+        addImage(R.drawable.heart, "emoji_heart_anim.sfb");
+        addImage(R.drawable.cloud, "object_cloud_anim.sfb");
+        addImage(R.drawable.pumpkin, "pumpkinman_anim.sfb");
+        addImage(R.drawable.icecream, "icecreamman_anim_a.sfb");
     }
 
     private void addObject(Uri model) {
@@ -119,6 +107,21 @@ public class GalleryLayout extends LinearLayout {
         node.setParent(anchorNode);
         fragment.getArSceneView().getScene().addChild(anchorNode);
         node.select();
+    }
+
+    private void addImage(int resId, String imageUrl) {
+        ImageView imageView = new ImageView(getContext());
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(IMAGE_SIZE, IMAGE_SIZE);
+        layoutParams.gravity = Gravity.CENTER | Gravity.CENTER_VERTICAL;
+        layoutParams.bottomMargin = IMAGE_MARGIN_SIZE;
+        imageView.setLayoutParams(layoutParams);
+        imageView.setImageResource(resId);
+        imageView.setContentDescription(imageUrl);
+        imageView.setOnClickListener(view -> {
+            addObject(Uri.parse(imageUrl));
+        });
+
+        addView(imageView);
     }
     // endregion
 }

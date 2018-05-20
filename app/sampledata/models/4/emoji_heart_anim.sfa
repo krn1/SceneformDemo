@@ -1,0 +1,83 @@
+{
+   materials: [
+      {
+         name: "blinn1",
+         parameters: [
+            {
+               baseColor: [
+                  1,
+                  1,
+                  1,
+                  1,
+               ],
+            },
+            {
+               baseColorMap: "emoji_heart",
+            },
+            {
+               normalMap: null,
+            },
+            {
+               interpolatedColor: null,
+            },
+            {
+               metallic: 0,
+            },
+            {
+               metallicMap: null,
+            },
+            {
+               roughness: 1,
+            },
+            {
+               roughnessMap: null,
+            },
+            {
+               reflectance: 0.5,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/fbx_material.sfm",
+      },
+   ],
+   model: {
+      attributes: [
+         "Position",
+         "TexCoord",
+         "Orientation",
+      ],
+      file: "sampledata/models/4/emoji_heart_anim.fbx",
+      name: "emoji_heart_anim",
+      suggested_collision: {
+         center: {
+            x: 0,
+            y: 0,
+            z: 0,
+         },
+         size: {
+            x: 1,
+            y: 1,
+            z: 1,
+         },
+         type: "Box",
+      },
+   },
+   samplers: [
+      {
+         file: "sampledata/models/4/emoji_heart_anim.fbm/emoji_heart_specular.png",
+         name: "emoji_heart_specular",
+         params: {
+            usage_type: "Data",
+         },
+         pipeline_name: "/Users/kraghu/Downloads/sceneform-intro-master/ARView/app/sampledata/models/4/emoji_heart_anim.fbm/emoji_heart_specular.png",
+      },
+      {
+         file: "sampledata/models/4/emoji_heart_anim.fbm/emoji_heart.png",
+         name: "emoji_heart",
+         pipeline_name: "/Users/kraghu/Downloads/sceneform-intro-master/ARView/app/sampledata/models/4/emoji_heart_anim.fbm/emoji_heart.png",
+      },
+   ],
+   version: "0.51:1",
+}
