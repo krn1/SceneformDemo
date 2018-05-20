@@ -25,7 +25,6 @@ import com.google.ar.sceneform.ux.TransformableNode;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import raghu.co.ar.MainActivity;
 import raghu.co.ar.R;
 import raghu.co.ar.utils.ViewUtils;
 
@@ -49,14 +48,6 @@ public class GalleryLayout extends LinearLayout {
 
     // region private
     private void init() {
-        //        ImageView andy = new ImageView(getContext());
-        //        andy.setImageResource(R.drawable.droid_thumb);
-        //        andy.setContentDescription("andy");
-        //        andy.setOnClickListener(view -> {
-        //            addObject(Uri.parse("andy.sfb"));
-        //        });
-        //        addView(andy);
-
         addImage(R.drawable.emoji_smile, "emoji_smile_anim_a.sfb");
         addImage(R.drawable.wow, "emoji_wow_anim.sfb");
         addImage(R.drawable.star, "object_star_anim.sfb");

@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.PixelCopy;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.ar.core.Frame;
@@ -27,7 +28,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.disposables.CompositeDisposable;
 import raghu.co.ar.gallery.GalleryLayout;
 import raghu.co.ar.utils.FileUtils;
 import raghu.co.ar.utils.ViewUtils;
@@ -44,12 +44,13 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.gallery_layout)
     GalleryLayout gallery;
 
+    @BindView(R.id.progress)
+    ProgressBar loadingSpinner;
+
     private ArFragment fragment;
     private PointerDrawable pointer = new PointerDrawable();
     private boolean isTracking;
     private boolean isHitting;
-
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +72,7 @@ public class MainActivity extends AppCompatActivity {
         gallery.addTo(fragment);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        compositeDisposable.clear();
-    }
-
+    // region private
     private void onUpdate() {
         Timber.e("frameTime listener onUpdate");
         boolean trackingChanged = updateTracking();
@@ -127,43 +123,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showSaved(Uri photoUri) {
-        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                "Photo saved", Snackbar.LENGTH_LONG);
-        snackbar.setAction("Open in Photos", v -> {
+        runOnUiThread(() -> {
 
-            Intent intent = new Intent(Intent.ACTION_VIEW, photoUri);
-            intent.setDataAndType(photoUri, "image/*");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(intent);
+            hideLoading();
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                    "Photo saved", Snackbar.LENGTH_LONG);
+            snackbar.setAction("Open in Photos", v -> {
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, photoUri);
+                intent.setDataAndType(photoUri, "image/*");
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(intent);
+
+            });
+            snackbar.show();
 
         });
-        snackbar.show();
+
     }
 
-//        private void startImageProcessing() {
-//            ArSceneView view = fragment.getArSceneView();
-//
-//            // Create a bitmap the size of the scene view.
-//            final Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),
-//                    Bitmap.Config.ARGB_8888);
-//
-//            Disposable disposable = Flowable.fromCallable(() -> processBitMap(view,bitmap))
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(photoUri -> showSaved(photoUri) );
-//
-//            compositeDisposable.add(disposable); //IDE is satisfied that the Disposable is being managed.
-//
-//        }
-//        
 
     private void takeCameraPhoto() {
+        showLoading();
         ArSceneView view = fragment.getArSceneView();
 
         // Create a bitmap the size of the scene view.
         final Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),
                 Bitmap.Config.ARGB_8888);
-
 
         processBitMap(view, bitmap);
     }
@@ -172,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         final HandlerThread handlerThread = new HandlerThread("BMCopy");
         handlerThread.start();
         PixelCopy.request(view, bitmap, (copyResult) -> {
-            Uri photoUri = null;
+            Uri photoUri;
             if (copyResult == PixelCopy.SUCCESS) {
                 try {
                     photoUri = FileUtils.saveBitmapToDisk(bitmap, this);
@@ -191,4 +177,13 @@ public class MainActivity extends AppCompatActivity {
             handlerThread.quitSafely();
         }, new Handler(handlerThread.getLooper()));
     }
+
+    private void showLoading() {
+        loadingSpinner.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoading() {
+        loadingSpinner.setVisibility(View.GONE);
+    }
+    // endregion
 }

@@ -27,4 +27,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="ProgressBar" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminate">true</item>
+        <item name="android:layout_marginBottom">30dp</item>
+        <item name="android:theme">@style/BaseAppTheme</item>
+    </style>
+
 </resources>

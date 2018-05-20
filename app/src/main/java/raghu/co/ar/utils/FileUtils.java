@@ -1,6 +1,5 @@
 package raghu.co.ar.utils;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
@@ -17,6 +16,7 @@ import java.util.Date;
 public class FileUtils {
 
     public static String filename = null;
+
     public static Uri saveBitmapToDisk(Bitmap bitmap, AppCompatActivity context) throws IOException {
         filename = generateFilename();
         File out = new File(filename);
@@ -32,7 +32,7 @@ public class FileUtils {
         } catch (IOException ex) {
             throw new IOException("Failed to save bitmap to disk", ex);
         }
-        return getPhotoUri(filename,context);
+        return getPhotoUri(filename, context);
     }
 
     private static String generateFilename() {

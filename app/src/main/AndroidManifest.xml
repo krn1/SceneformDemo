@@ -3,8 +3,10 @@
     package="raghu.co.ar">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera.ar" android:required="true" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature
+        android:name="android.hardware.camera.ar"
+        android:required="true" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +32,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/BaseAppTheme" />
 
-        <meta-data android:name="com.google.ar.core" android:value="required" />
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="required" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -39,7 +43,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/paths"/>
+                android:resource="@xml/paths" />
         </provider>
     </application>
 

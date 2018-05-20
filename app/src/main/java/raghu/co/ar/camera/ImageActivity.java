@@ -12,11 +12,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import raghu.co.ar.R;
 import raghu.co.ar.utils.FileUtils;
-import timber.log.Timber;
 
-public class ImageActivity extends AppCompatActivity{
+public class ImageActivity extends AppCompatActivity {
 
-    private static final String KEY_BITMAP_ID = "bitmap_img" ;
+    private static final String KEY_BITMAP_ID = "bitmap_img";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -37,9 +36,6 @@ public class ImageActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         String uri = getIntent().getStringExtra(KEY_BITMAP_ID);
-       // imageView.setImageURI(Uri.parse(uri));
-
-        imageView.setImageURI(FileUtils.getPhotoUri(FileUtils.filename,this));
-        Timber.e("started u fucker");
+        imageView.setImageURI(FileUtils.getPhotoUri(FileUtils.filename, this));
     }
 }
